@@ -21,6 +21,9 @@ namespace RockPaperScissors
     /// </summary>
     public partial class MainWindow : Window
     {
+        int wins = 0;
+        int losses = 0;
+        int draws = 0;
         static Random r = new Random();
 
         enum Hand
@@ -31,9 +34,13 @@ namespace RockPaperScissors
             Scissors
         };
 
+        //Hand p1 = new Hand();
+        Hand p2 = new Hand();
+
         public MainWindow()
         {
             InitializeComponent();
+            UpdateStatistics();
         }
 
         public async Task Wait(int milliseconds)
@@ -59,21 +66,176 @@ namespace RockPaperScissors
 
         async Task StartCountdown()
         {
+            StartButton.Visibility = Visibility.Collapsed;
+            GetCPUHand();
+
             Countdown.Text = "Ready?";
             Countdown.Visibility = Visibility.Visible;
             await Wait(1000);
+            Player1Image.Source = new BitmapImage(new Uri((@"images/fistdown.png"), UriKind.RelativeOrAbsolute));
+            Player2Image.Source = new BitmapImage(new Uri((@"images/fistdown.png"), UriKind.RelativeOrAbsolute));
             Countdown.Text = "Rock!";
-            await Wait(1000);
+            await Wait(500);
+            Player1Image.Source = new BitmapImage(new Uri((@"images/fist.png"), UriKind.RelativeOrAbsolute));
+            Player2Image.Source = new BitmapImage(new Uri((@"images/fist.png"), UriKind.RelativeOrAbsolute));
+            await Wait(500);
+            Player1Image.Source = new BitmapImage(new Uri((@"images/fistdown.png"), UriKind.RelativeOrAbsolute));
+            Player2Image.Source = new BitmapImage(new Uri((@"images/fistdown.png"), UriKind.RelativeOrAbsolute));
             Countdown.Text = "Paper!";
-            await Wait(1000);
+            await Wait(500);
+            Player1Image.Source = new BitmapImage(new Uri((@"images/fist.png"), UriKind.RelativeOrAbsolute));
+            Player2Image.Source = new BitmapImage(new Uri((@"images/fist.png"), UriKind.RelativeOrAbsolute));
+            await Wait(500);
+            Player1Image.Source = new BitmapImage(new Uri((@"images/fistdown.png"), UriKind.RelativeOrAbsolute));
+            Player2Image.Source = new BitmapImage(new Uri((@"images/fistdown.png"), UriKind.RelativeOrAbsolute));
             Countdown.Text = "Scissors!";
-            await Wait(1000);
+            await Wait(500);
+            Player1Image.Source = new BitmapImage(new Uri((@"images/fist.png"), UriKind.RelativeOrAbsolute));
+            Player2Image.Source = new BitmapImage(new Uri((@"images/fist.png"), UriKind.RelativeOrAbsolute));
+            await Wait(500); 
             Countdown.Text = "SHOOT!";
+            UserSelection.Visibility = Visibility.Visible;
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
+            Player1Image.Source = new BitmapImage(new Uri((@"images/fist.png"), UriKind.RelativeOrAbsolute));
+            Player2Image.Source = new BitmapImage(new Uri((@"images/fist.png"), UriKind.RelativeOrAbsolute));
+            
             StartCountdown();
+        }
+
+        private void GetCPUHand()
+        {
+            
+            int rInt = r.Next(1, 3);
+
+            switch (rInt)
+            {
+                case 1:
+                    p2 = Hand.Paper;
+                    break;
+                case 2:
+                    p2 = Hand.Rock;
+                    break;
+                case 3:
+                    p2 = Hand.Scissors;
+                    break;
+                default:
+                    System.Windows.Forms.MessageBox.Show("Mistakes were made...");
+                    break;
+
+            }
+        }
+
+        private void P1PlaysRock_Click(object sender, RoutedEventArgs e)
+        {
+            Player1Image.Source = new BitmapImage(new Uri((@"images/rock.png"), UriKind.RelativeOrAbsolute));
+            P2HandDisplay();
+            UserSelection.Visibility = Visibility.Collapsed;
+            switch (p2)
+            {
+                case Hand.Paper:
+                    Countdown.Text = "Paper covers rock! \nYou lose!";
+                    losses++;
+                    break;
+                case Hand.Rock:
+                    Countdown.Text = "A draw!";
+                    draws++;
+                    break;
+                case Hand.Scissors:
+                    Countdown.Text = "Rock smashes scissors! \nYou win!";
+                    wins++;
+                    break;
+                default:
+                    System.Windows.Forms.MessageBox.Show("Mistakes were made...");
+                    break;
+            }
+            StartButton.Visibility = Visibility.Visible;
+            UpdateStatistics();
+        }
+
+        private void P1PlaysPaper_Click(object sender, RoutedEventArgs e)
+        {
+            Player1Image.Source = new BitmapImage(new Uri((@"images/paper.png"), UriKind.RelativeOrAbsolute));
+            P2HandDisplay();
+            UserSelection.Visibility = Visibility.Collapsed;
+            switch (p2)
+            {
+                case Hand.Paper:
+                    Countdown.Text = "A draw!";
+                    draws++;
+                    break;
+                case Hand.Rock:
+                    Countdown.Text = "Paper covers rock! \nYou win!";
+                    wins++;
+                    break;
+                case Hand.Scissors:
+                    Countdown.Text = "Scissors cut paper! \nYou lose!";
+                    losses++;
+                    break;
+                default:
+                    System.Windows.Forms.MessageBox.Show("Mistakes were made...");
+                    break;
+            }
+            StartButton.Visibility = Visibility.Visible;
+            UpdateStatistics();
+        }
+
+        private void P1PlaysScissors_Click(object sender, RoutedEventArgs e)
+        {
+            Player1Image.Source = new BitmapImage(new Uri((@"images/scissors.png"), UriKind.RelativeOrAbsolute));
+            P2HandDisplay();
+            UserSelection.Visibility = Visibility.Collapsed;
+            switch (p2)
+            {
+                case Hand.Paper:
+                    Countdown.Text = "Scissors cut paper! \nYou win!";
+                    wins++;
+                    break;
+                case Hand.Rock:
+                    Countdown.Text = "Rock smashes scissors! \nYou lose!";
+                    losses++;
+                    break;
+                case Hand.Scissors:
+                    Countdown.Text = "A draw!";
+                    draws++;
+                    break;
+                default:
+                    System.Windows.Forms.MessageBox.Show("Mistakes were made...");
+                    break;
+            }
+            StartButton.Visibility = Visibility.Visible;
+            UpdateStatistics();
+        }
+
+        private void P2HandDisplay()
+        {
+            switch (p2)
+            {
+                case Hand.Paper:
+                    Player2Image.Source = new BitmapImage(new Uri((@"images/paper.png"), UriKind.RelativeOrAbsolute));
+                    break;
+                case Hand.Rock:
+                    Player2Image.Source = new BitmapImage(new Uri((@"images/rock.png"), UriKind.RelativeOrAbsolute));
+                    break;
+                case Hand.Scissors:
+                    Player2Image.Source = new BitmapImage(new Uri((@"images/scissors.png"), UriKind.RelativeOrAbsolute));
+                    break;
+                default:
+                    System.Windows.Forms.MessageBox.Show("Mistakes were made...");
+                    break;
+            }
+        }
+
+        private void UpdateStatistics()
+        {
+            if (wins == 0 && draws == 0 && losses == 0)
+                Stats.Text = "You haven't played any games yet.";
+            else
+            {
+                Stats.Text = "You have won " + wins + " games, drawn " + draws + " and lost " + losses + " games.";
+            }
         }
     }
 }
