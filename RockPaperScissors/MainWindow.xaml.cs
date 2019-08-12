@@ -254,12 +254,14 @@ namespace RockPaperScissors
                 MainGameWindow.WindowState = WindowState.Maximized;
                 ColourOne.Color = Color.FromArgb(255, 128, 85, 18);
                 ColourTwo.Color = Color.FromArgb(255, 72, 9, 128);
+                WindowShadow.Opacity = 0.8;
             }
             else
             {
                 MainGameWindow.WindowState = WindowState.Normal;
                 ColourOne.Color = Color.FromArgb(0, 0, 0, 0);
                 ColourTwo.Color = Color.FromArgb(0, 0, 0, 0);
+                WindowShadow.Opacity = 0;
             }
         }
     }
