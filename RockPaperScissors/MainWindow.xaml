@@ -5,8 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RockPaperScissors"
         mc:Ignorable="d"
-        Title="MainWindow" >
-    <Grid>
+        Title="Rock Paper Scissors" x:Name="MainGameWindow" AllowsTransparency="True" WindowStyle="None"
+        Width="800" Height="600" WindowStartupLocation="CenterScreen">
+
+    <Window.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" >
+            <GradientStop x:Name="ColourOne" Color="#00000000" Offset="0" />
+            <GradientStop x:Name="ColourTwo" Color="#00000000" Offset="1.0" />
+        </LinearGradientBrush>
+    </Window.Background>
+
+    <Grid Width="800" Height="600">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5*"/>
             <ColumnDefinition Width="1*"/>
@@ -19,22 +28,30 @@
             <RowDefinition Height="4*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <TextBlock 
-            x:Name="Countdown" Text="PlaceHolder" FontSize="100" Visibility="Collapsed" 
-            HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" 
-            Panel.ZIndex="100" Grid.ColumnSpan="4" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0"/>
+        <Border Grid.ColumnSpan="4" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="Countdown" Panel.ZIndex="5">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="50" ShadowDepth="0" Direction="0" Color="Azure"/>
+            </Border.Effect>
+            <TextBlock x:Name="CountdownText" Text=" " FontSize="80" TextWrapping="WrapWithOverflow" TextAlignment="Center"/>
+        </Border>
 
-        <TextBlock Text="You" FontSize="40" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Center" Panel.ZIndex="10"/>
-        <TextBlock Text="Opponent" FontSize="40" Grid.Row="0" Grid.Column="3" VerticalAlignment="Bottom" HorizontalAlignment="Center" Panel.ZIndex="10"/>
+        <Button x:Name="MaxMin" Grid.Column="0" Grid.Row="0" Click="MaxMin_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Width="25" Height="25" Panel.ZIndex="5">
+            <Image Source="images/buttonIcons/resize.png"/>
+        </Button>
+        <Border Background="#4C0000FF" CornerRadius="10" Margin="15" Grid.Row="0" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Center" Panel.ZIndex="5">
+            <TextBlock Text="You" FontSize="40" Margin="10 0 10 0"/>
+        </Border>
+        <Border Background="#4CFF0000" CornerRadius="10" Margin="15" Grid.Row="0" Grid.Column="3" VerticalAlignment="Top" HorizontalAlignment="Center" Panel.ZIndex="5">
+            <TextBlock Text="Opponent" FontSize="40" Margin="10 0 10 0"/>
+        </Border>
 
-
-        <Border Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left">
+        <Border Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" Panel.ZIndex="4">
             <Border.Effect>
                 <DropShadowEffect ShadowDepth="50" Direction="250" BlurRadius="30"/>
             </Border.Effect>
             <Image x:Name="Player1Image" Source="images/fist.png"/>
         </Border>
-        <Border Grid.Row="0" Grid.RowSpan="3" Grid.Column="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Right">
+        <Border Grid.Row="0" Grid.RowSpan="3" Grid.Column="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Right" Panel.ZIndex="4">
             <Border.Effect>
                 <DropShadowEffect ShadowDepth="50" Direction="290" BlurRadius="30"/>
             </Border.Effect>
@@ -49,13 +66,46 @@
                 </Image.RenderTransform>
             </Image>
         </Border>
-        <DockPanel x:Name="UserSelection" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Width="330" Visibility="Collapsed">
-            <Button x:Name="P1PlaysRock" Content="Rock" Width="100" Height="40" Margin="5" Click="P1PlaysRock_Click"/>
-            <Button x:Name="P1PlaysPaper" Content="Paper" Width="100" Height="40" Margin="5" Click="P1PlaysPaper_Click"/>
-            <Button x:Name="P1PlaysScissors" Content="Scissors" Width="100" Height="40" Margin="5" Click="P1PlaysScissors_Click"/>
+        <DockPanel x:Name="UserSelection" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Width="390" Visibility="Collapsed" Panel.ZIndex="5">
+            <Button x:Name="P1PlaysRock" Width="120" Height="60" Margin="5" Click="P1PlaysRock_Click">
+                <DockPanel>
+                    <Image Source="images/buttonIcons/rock.png"/>
+                    <TextBlock Text="Rock" VerticalAlignment="Center" Margin="5"/>
+                </DockPanel>
+            </Button>
+            <Button x:Name="P1PlaysPaper" Width="120" Height="60" Margin="5" Click="P1PlaysPaper_Click">
+                <DockPanel>
+                    <Image Source="images/buttonIcons/paper.png"/>
+                    <TextBlock Text="Paper" VerticalAlignment="Center" Margin="5"/>
+                </DockPanel>
+            </Button>
+            <Button x:Name="P1PlaysScissors" Width="120" Height="60" Margin="5" Click="P1PlaysScissors_Click">
+                <DockPanel>
+                    <Image Source="images/buttonIcons/scissors.png"/>
+                    <TextBlock Text="Scissors" VerticalAlignment="Center" Margin="5"/>
+                </DockPanel>
+            </Button>
         </DockPanel>
 
-        <Button x:Name="StartButton" Content="Start Countdown" Width="100" Height="40" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Bottom" Click="StartButton_Click" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2"/>
+        <DockPanel x:Name="PlayExitButtons" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="2" Panel.ZIndex="5">
+
+            <Button x:Name="StartButton" Width="120" Height="60" Margin="5" Click="StartButton_Click" >
+            <DockPanel>
+                <Image Source="images/buttonIcons/play-button.png"/>
+                    <TextBlock Text="Play Game" VerticalAlignment="Center" Margin="5" FontSize="13" TextWrapping="Wrap" TextAlignment="Center" FontWeight="Bold"/>
+            </DockPanel>
+        </Button>
+            <Button x:Name="ExitButton" Width="120" Height="60" Margin="5" Click="ExitButton_Click">
+                <DockPanel>
+                    <Image Source="images/buttonIcons/exit-door.png"/>
+                    <TextBlock Text="Exit Game" VerticalAlignment="Center" Margin="5" FontSize="13" TextWrapping="Wrap" TextAlignment="Center" FontWeight="Bold"/>
+                </DockPanel>
+            </Button>
+        </DockPanel>
         <TextBlock x:Name="Stats" Text="Game statistics" FontSize="25" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" VerticalAlignment="Center" HorizontalAlignment="Center" Panel.ZIndex="10"/>
+
+        <Border Panel.ZIndex="0" CornerRadius="20" Background="CornflowerBlue" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Grid.RowSpan="4" Opacity="0.8">
+            
+        </Border>
     </Grid>
 </Window>

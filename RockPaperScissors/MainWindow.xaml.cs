@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MessageBox = System.Windows.MessageBox;
 
 namespace RockPaperScissors
 {
@@ -66,34 +67,34 @@ namespace RockPaperScissors
 
         async Task StartCountdown()
         {
-            StartButton.Visibility = Visibility.Collapsed;
+            PlayExitButtons.Visibility = Visibility.Collapsed;
             GetCPUHand();
 
-            Countdown.Text = "Ready?";
+            CountdownText.Text = "Ready?";
             Countdown.Visibility = Visibility.Visible;
             await Wait(1000);
             Player1Image.Source = new BitmapImage(new Uri((@"images/fistdown.png"), UriKind.RelativeOrAbsolute));
             Player2Image.Source = new BitmapImage(new Uri((@"images/fistdown.png"), UriKind.RelativeOrAbsolute));
-            Countdown.Text = "Rock!";
+            CountdownText.Text = "Rock!";
             await Wait(500);
             Player1Image.Source = new BitmapImage(new Uri((@"images/fist.png"), UriKind.RelativeOrAbsolute));
             Player2Image.Source = new BitmapImage(new Uri((@"images/fist.png"), UriKind.RelativeOrAbsolute));
             await Wait(500);
             Player1Image.Source = new BitmapImage(new Uri((@"images/fistdown.png"), UriKind.RelativeOrAbsolute));
             Player2Image.Source = new BitmapImage(new Uri((@"images/fistdown.png"), UriKind.RelativeOrAbsolute));
-            Countdown.Text = "Paper!";
+            CountdownText.Text = "Paper!";
             await Wait(500);
             Player1Image.Source = new BitmapImage(new Uri((@"images/fist.png"), UriKind.RelativeOrAbsolute));
             Player2Image.Source = new BitmapImage(new Uri((@"images/fist.png"), UriKind.RelativeOrAbsolute));
             await Wait(500);
             Player1Image.Source = new BitmapImage(new Uri((@"images/fistdown.png"), UriKind.RelativeOrAbsolute));
             Player2Image.Source = new BitmapImage(new Uri((@"images/fistdown.png"), UriKind.RelativeOrAbsolute));
-            Countdown.Text = "Scissors!";
+            CountdownText.Text = "Scissors!";
             await Wait(500);
             Player1Image.Source = new BitmapImage(new Uri((@"images/fist.png"), UriKind.RelativeOrAbsolute));
             Player2Image.Source = new BitmapImage(new Uri((@"images/fist.png"), UriKind.RelativeOrAbsolute));
             await Wait(500); 
-            Countdown.Text = "SHOOT!";
+            CountdownText.Text = "SHOOT!";
             UserSelection.Visibility = Visibility.Visible;
         }
 
@@ -136,22 +137,22 @@ namespace RockPaperScissors
             switch (p2)
             {
                 case Hand.Paper:
-                    Countdown.Text = "Paper covers rock! \nYou lose!";
+                    CountdownText.Text = "Paper covers rock! \nYou lose!";
                     losses++;
                     break;
                 case Hand.Rock:
-                    Countdown.Text = "A draw!";
+                    CountdownText.Text = "A draw!";
                     draws++;
                     break;
                 case Hand.Scissors:
-                    Countdown.Text = "Rock smashes scissors! \nYou win!";
+                    CountdownText.Text = "Rock smashes scissors! \nYou win!";
                     wins++;
                     break;
                 default:
                     System.Windows.Forms.MessageBox.Show("Mistakes were made...");
                     break;
             }
-            StartButton.Visibility = Visibility.Visible;
+            PlayExitButtons.Visibility = Visibility.Visible;
             UpdateStatistics();
         }
 
@@ -163,22 +164,22 @@ namespace RockPaperScissors
             switch (p2)
             {
                 case Hand.Paper:
-                    Countdown.Text = "A draw!";
+                    CountdownText.Text = "A draw!";
                     draws++;
                     break;
                 case Hand.Rock:
-                    Countdown.Text = "Paper covers rock! \nYou win!";
+                    CountdownText.Text = "Paper covers rock! \nYou win!";
                     wins++;
                     break;
                 case Hand.Scissors:
-                    Countdown.Text = "Scissors cut paper! \nYou lose!";
+                    CountdownText.Text = "Scissors cut paper! \nYou lose!";
                     losses++;
                     break;
                 default:
                     System.Windows.Forms.MessageBox.Show("Mistakes were made...");
                     break;
             }
-            StartButton.Visibility = Visibility.Visible;
+            PlayExitButtons.Visibility = Visibility.Visible;
             UpdateStatistics();
         }
 
@@ -190,22 +191,22 @@ namespace RockPaperScissors
             switch (p2)
             {
                 case Hand.Paper:
-                    Countdown.Text = "Scissors cut paper! \nYou win!";
+                    CountdownText.Text = "Scissors cut paper! \nYou win!";
                     wins++;
                     break;
                 case Hand.Rock:
-                    Countdown.Text = "Rock smashes scissors! \nYou lose!";
+                    CountdownText.Text = "Rock smashes scissors! \nYou lose!";
                     losses++;
                     break;
                 case Hand.Scissors:
-                    Countdown.Text = "A draw!";
+                    CountdownText.Text = "A draw!";
                     draws++;
                     break;
                 default:
                     System.Windows.Forms.MessageBox.Show("Mistakes were made...");
                     break;
             }
-            StartButton.Visibility = Visibility.Visible;
+            PlayExitButtons.Visibility = Visibility.Visible;
             UpdateStatistics();
         }
 
@@ -223,7 +224,7 @@ namespace RockPaperScissors
                     Player2Image.Source = new BitmapImage(new Uri((@"images/scissors.png"), UriKind.RelativeOrAbsolute));
                     break;
                 default:
-                    System.Windows.Forms.MessageBox.Show("Mistakes were made...");
+                    MessageBox.Show("Mistakes were made...");
                     break;
             }
         }
@@ -235,6 +236,30 @@ namespace RockPaperScissors
             else
             {
                 Stats.Text = "You have won " + wins + " games, drawn " + draws + " and lost " + losses + " games.";
+            }
+        }
+
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Do you want to exit?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                this.Close();
+            }
+        }
+
+        private void MaxMin_Click(object sender, RoutedEventArgs e)
+        {
+            if(MainGameWindow.WindowState == WindowState.Normal)
+            {
+                MainGameWindow.WindowState = WindowState.Maximized;
+                ColourOne.Color = Color.FromArgb(255, 128, 85, 18);
+                ColourTwo.Color = Color.FromArgb(255, 72, 9, 128);
+            }
+            else
+            {
+                MainGameWindow.WindowState = WindowState.Normal;
+                ColourOne.Color = Color.FromArgb(0, 0, 0, 0);
+                ColourTwo.Color = Color.FromArgb(0, 0, 0, 0);
             }
         }
     }
